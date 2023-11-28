@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/akannan1087/docker-spring-boot']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mmbabu1988/helm-spring-boot.git']])
             }
         }
         
@@ -34,17 +34,13 @@ pipeline {
                 }
             }
         }
-        
-        stage ("Helm package") {
-            steps {
-                    sh "helm package springboot"
-                }
-            }
-                
-        stage ("Helm install") {
-            steps {
-                    sh "helm upgrade myrelease-21 springboot-0.1.0.tgz"
-                }
-            }
+        	
+		stage("Helm Deploy") {
+		    steps {
+			    script {
+				    sh "helm upgrade first --install mychart --namespace helm-deployment --set image.tag=latest"
+				}
+			}
+		}	
     }
 }
